@@ -11,7 +11,7 @@ public class DepartmentController {
     public DepartmentController(EmployeeServiceClient employeeServiceClient) {
         this.employeeServiceClient = employeeServiceClient;
     }
-    @GetMapping("/departments/{employeeId}")
+    @GetMapping("/{employeeId}")
     public String getEmployeeDepartment(@PathVariable String employeeId) {
         Employee employee = employeeServiceClient.getEmployeeById(employeeId);
         return "Employee " + employee.getName() + " works in the " + employee.getDepartment() + " department.";

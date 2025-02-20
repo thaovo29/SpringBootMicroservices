@@ -1,14 +1,11 @@
-# Use an official JDK runtime as a parent image
-FROM eclipse-temurin:17-jdk
-
-# Set the working directory in the container
+FROM eclipse-temurin:17-jdk AS builder
 WORKDIR /app
+COPY . .
+RUN ./mvnw clean install -DskipTests  # Use Maven Wrapper or `mvn` if installed
 
-# Copy the JAR file into the container
-COPY target/department-service-0.0.1-SNAPSHOT.jar department-service.jar
-
-# Expose port 8082
-EXPOSE 8082
-
+# Stage 2: Run the application with a lightweight JRE
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=builder /app/target/department-service-0.0.1-SNAPSHOT.jar department-service.jar
 # Run the application
 ENTRYPOINT ["java", "-jar", "department-service.jar"]
