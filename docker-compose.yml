@@ -1,0 +1,25 @@
+version: '3'
+services:
+  employee-service:
+    image: employee-service
+    build:
+      context: ./employee-service
+    ports:
+      - "8081:8081"
+    networks:
+      - microservices-net
+
+  department-service:
+    image: department-service
+    build:
+      context: ./department-service
+    ports:
+      - "8082:8082"
+    environment:
+      - EMPLOYEE_SERVICE_URL=http://employee-service:8081
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
+    driver: bridge
